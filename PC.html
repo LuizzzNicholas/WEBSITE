@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>luizzx · Portofolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+    <style>
+        /* ── RESET & BASE ── */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #08080e;
+            color: #e4e4e7;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ── LAYAR BELAKANG ── */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ── ORB / BOLA CAHAYA (lapisan kedua) ── */
+        .orb-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.25;
+            animation: orbFloat 18s ease-in-out infinite alternate;
+        }
+        .orb-1 {
+            width: 500px;
+            height: 500px;
+            background: #6b21a5;
+            top: -10%;
+            left: -10%;
+            animation-delay: 0s;
+        }
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: #2563eb;
+            bottom: -10%;
+            right: -10%;
+            animation-delay: -6s;
+        }
+        .orb-3 {
+            width: 350px;
+            height: 350px;
+            background: #7c3aed;
+            top: 40%;
+            left: 50%;
+            animation-delay: -12s;
+        }
+
+        @keyframes orbFloat {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+            33% {
+                transform: translate(80px, -60px) scale(1.2);
+            }
+            66% {
+                transform: translate(-40px, 80px) scale(0.9);
+            }
+            100% {
+                transform: translate(60px, 40px) scale(1.1);
+            }
+        }
+
+        /* ── GRID GARIS HALUS (lapisan ketiga) ── */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        /* ── MAIN WRAPPER (di atas semua layer) ── */
+        .main-wrapper {
+            position: relative;
+            z-index: 2;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 3rem;
+        }
+
+        /* ── GLASS CARD ── */
+        .glass {
+            background: rgba(20, 20, 30, 0.5);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.7);
+            transition: transform 0.25s ease, border-color 0.3s ease;
+        }
+        .glass:hover {
+            border-color: rgba(167, 139, 250, 0.25);
+            transform: translateY(-2px);
+        }
+
+        /* ── TERMINAL ── */
+        .terminal {
+            padding: 0.9rem 1.8rem;
+            margin-bottom: 2.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.5rem 1.2rem;
+            font-size: 0.95rem;
+            animation: fadeSlideDown 0.8s ease both;
+        }
+        .terminal .prompt {
+            color: #6bde7a;
+            font-weight: 700;
+        }
+        .terminal .cmd {
+            color: #f0f0f5;
+        }
+        .terminal .output {
+            color: #a0a0b8;
+        }
+        .terminal .highlight {
+            color: #fbbf24;
+            font-weight: 600;
+        }
+        .terminal .badge-ver {
+            margin-left: auto;
+            color: #6b6b85;
+            font-size: 0.8rem;
+            letter-spacing: 0.3px;
+        }
+
+        /* ── HERO ── */
+        .hero {
+            margin-bottom: 3.5rem;
+            animation: fadeSlideUp 0.9s ease both;
+            animation-delay: 0.15s;
+        }
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            background: linear-gradient(135deg, #f0f0f5 0%, #a78bfa 50%, #6bde7a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.25rem;
+            line-height: 1.1;
+        }
+        .hero .typing-wrap {
+            font-size: 1.3rem;
+            color: #a0a0b8;
+            min-height: 2.4rem;
+        }
+        .hero .typing-wrap .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.2em;
+            background: #a78bfa;
+            margin-left: 4px;
+            vertical-align: text-bottom;
+            animation: blink 0.9s step-end infinite;
+        }
+        .hero .typing-wrap .static-text {
+            color: #e4e4e7;
+        }
+        .hero .typing-wrap .dynamic-text {
+            color: #fbbf24;
+            font-weight: 600;
+        }
+
+        /* ── SECTION ── */
+        .section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #6b6b85;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .section-title .line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(167, 139, 250, 0.3), transparent);
+        }
+
+        /* ── GRID ── */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.25rem;
+        }
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        /* ── CARD ── */
+        .card {
+            padding: 1.4rem 1.5rem;
+            background: rgba(18, 18, 30, 0.55);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            animation: fadeSlideUp 0.7s ease both;
+        }
+        .card:hover {
+            border-color: rgba(167, 139, 250, 0.2);
+            background: rgba(24, 24, 40, 0.7);
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 16px 40px -16px rgba(167, 139, 250, 0.15);
+        }
+        .card .label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #6b6b85;
+            margin-bottom: 0.2rem;
+        }
+        .card .value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #f0f0f5;
+        }
+        .card .sub {
+            font-size: 0.8rem;
+            color: #8a8aa3;
+            margin-top: 0.2rem;
+        }
+        .card .badge {
+            display: inline-block;
+            background: rgba(167, 139, 250, 0.15);
+            padding: 0.15rem 0.7rem;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            color: #c4b5fd;
+            margin-top: 0.4rem;
+            border: 1px solid rgba(167, 139, 250, 0.1);
+        }
+
+        /* ── FOOTER ── */
+        .footer {
+            margin-top: 4rem;
+            padding-top: 1.8rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            color: #6b6b85;
+            font-size: 0.85rem;
+            text-align: center;
+            animation: fadeSlideUp 1s ease both;
+            animation-delay: 0.4s;
+        }
+        .footer a {
+            color: #a78bfa;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer a:hover {
+            color: #c4b5fd;
+        }
+
+        /* ── ANIMASI ── */
+        @keyframes fadeSlideDown {
+            0% {
+                opacity: 0;
+                transform: translateY(-18px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeSlideUp {
+            0% {
+                opacity: 0;
+                transform: translateY(28px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes blink {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* delay card */
+        .grid-2 .card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+        .grid-2 .card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .grid-2 .card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+        .grid-2 .card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+        .grid-3 .card:nth-child(1) {
+            animation-delay: 0.05s;
+        }
+        .grid-3 .card:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+        .grid-3 .card:nth-child(3) {
+            animation-delay: 0.15s;
+        }
+        .grid-3 .card:nth-child(4) {
+            animation-delay: 0.2s;
+        }
+        .grid-3 .card:nth-child(5) {
+            animation-delay: 0.25s;
+        }
+        .grid-3 .card:nth-child(6) {
+            animation-delay: 0.3s;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 640px) {
+            .hero h1 {
+                font-size: 2.6rem;
+            }
+            .hero .typing-wrap {
+                font-size: 1rem;
+                min-height: 2rem;
+            }
+            .terminal {
+                font-size: 0.8rem;
+                padding: 0.7rem 1.2rem;
+            }
+            .terminal .badge-ver {
+                display: none;
+            }
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            .grid-3 {
+                grid-template-columns: 1fr 1fr;
+            }
+            .orb-1,
+            .orb-2,
+            .orb-3 {
+                width: 200px;
+                height: 200px;
+                filter: blur(60px);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LAYAR BELAKANG : CANVAS BINTANG -->
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- LAYAR BELAKANG : ORB CAHAYA -->
+    <div class="orb-container">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- LAYAR BELAKANG : GRID HALUS -->
+    <div class="grid-overlay"></div>
+
+    <!-- MAIN WRAPPER -->
+    <div class="main-wrapper">
+
+        <!-- TERMINAL -->
+        <div class="terminal glass">
+            <span class="prompt">$</span>
+            <span class="cmd">whoami</span>
+            <span class="output">→</span>
+            <span class="highlight">luizzx</span>
+            <span class="badge-ver">✦ portofolio v2.0</span>
+        </div>
+
+        <!-- HERO -->
+        <div class="hero">
+            <h1>luizzx</h1>
+            <div class="typing-wrap">
+                <span class="static-text">Saya </span>
+                <span class="dynamic-text" id="typed-text"></span>
+                <span class="cursor"></span>
+            </div>
+        </div>
+
+        <!-- TENTANG -->
+        <div class="section">
+            <div class="section-title"><span>▸ Tentang</span><span class="line"></span></div>
+            <div class="grid-2">
+                <div class="card glass"><div class="label">Nama</div><div class="value">Luizzx</div><div class="sub">📍 Indonesia</div></div>
+                <div class="card glass"><div class="label">Fokus</div><div class="value">Frontend &amp; UI</div><div class="sub">React · Tailwind · CSS</div></div>
+                <div class="card glass"><div class="label">Pengalaman</div><div class="value">2+ tahun</div><div class="sub">Proyek pribadi &amp; kolab</div></div>
+                <div class="card glass"><div class="label">Status</div><div class="value">🚀 Siap kolaborasi</div><div class="sub">Terbuka untuk ide baru</div></div>
+            </div>
+        </div>
+
+        <!-- KEAHLIAN -->
+        <div class="section">
+            <div class="section-title"><span>▸ Keahlian</span><span class="line"></span></div>
+            <div class="grid-3">
+                <div class="card glass"><span class="value">HTML / CSS</span><div class="sub">Responsif · Animasi</div></div>
+                <div class="card glass"><span class="value">JavaScript</span><div class="sub">ES6+ · DOM</div></div>
+                <div class="card glass"><span class="value">React</span><div class="sub">Hooks · State</div></div>
+                <div class="card glass"><span class="value">Tailwind</span><div class="sub">Utility-first</div></div>
+                <div class="card glass"><span class="value">Git</span><div class="sub">Version control</div></div>
+                <div class="card glass"><span class="value">Figma</span><div class="sub">Prototipe</div></div>
+            </div>
+        </div>
+
+        <!-- PROYEK -->
+        <div class="section">
+            <div class="section-title"><span>▸ Proyek</span><span class="line"></span></div>
+            <div class="grid-2">
+                <div class="card glass"><div class="label">Website</div><div class="value">luizzx.dev</div><div class="sub">Portofolio pribadi</div><span class="badge">live</span></div>
+                <div class="card glass"><div class="label">Aplikasi</div><div class="value">Catatan Cepat</div><div class="sub">Notes dengan localStorage</div><span class="badge">demo</span></div>
+                <div class="card glass"><div class="label">UI Kit</div><div class="value">Neumorph</div><div class="sub">Komponen neumorfisme</div><span class="badge">open source</span></div>
+                <div class="card glass"><div class="label">Bot</div><div class="value">Discord Music</div><div class="sub">Pemutar musik sederhana</div><span class="badge">private</span></div>
+            </div>
+        </div>
+
+        <!-- KONTAK -->
+        <div class="section">
+            <div class="section-title"><span>▸ Kontak</span><span class="line"></span></div>
+            <div class="grid-2">
+                <div class="card glass"><div class="label">Email</div><div class="value">luizzx@example.com</div></div>
+                <div class="card glass"><div class="label">GitHub</div><div class="value">github.com/luizzx</div></div>
+                <div class="card glass"><div class="label">Twitter</div><div class="value">@luizzxdev</div></div>
+                <div class="card glass"><div class="label">Discord</div><div class="value">luizzx#1234</div></div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            Dibuat dengan ☕ oleh <strong>luizzx</strong> · 2026
+        </div>
+
+    </div>
+
+    <script>
+        // ─── TYPING ───
+        (function typing() {
+            const words = ['pengembang web', 'desainer UI', 'problem solver', 'kreator digital'];
+            const el = document.getElementById('typed-text');
+            let wordIndex = 0,
+                charIndex = 0,
+                isDeleting = false;
+            let timer;
+
+            function type() {
+                const current = words[wordIndex];
+                if (!isDeleting) {
+                    el.textContent = current.slice(0, charIndex + 1);
+                    charIndex++;
+                    if (charIndex === current.length) {
+                        isDeleting = true;
+                        timer = setTimeout(type, 2200);
+                        return;
+                    }
+                    timer = setTimeout(type, 80);
+                } else {
+                    el.textContent = current.slice(0, charIndex - 1);
+                    charIndex--;
+                    if (charIndex === 0) {
+                        isDeleting = false;
+                        wordIndex = (wordIndex + 1) % words.length;
+                        timer = setTimeout(type, 400);
+                        return;
+                    }
+                    timer = setTimeout(type, 45);
+                }
+            }
+            type();
+        })();
+
+        // ─── BINTANG (canvas) ───
+        (function stars() {
+            const canvas = document.getElementById('bg-canvas');
+            const ctx = canvas.getContext('2d');
+            let w, h;
+            const particles = [];
+            const COUNT = 160;
+
+            function resize() {
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            for (let i = 0; i < COUNT; i++) {
+                particles.push({
+                    x: Math.random() * w,
+                    y: Math.random() * h,
+                    r: Math.random() * 2 + 0.4,
+                    dx: (Math.random() - 0.5) * 0.25,
+                    dy: (Math.random() - 0.5) * 0.25,
+                    alpha: Math.random() * 0.6 + 0.3
+                });
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, w, h);
+                for (const p of particles) {
+                    p.x += p.dx;
+                    p.y += p.dy;
+                    if (p.x < 0) p.x = w;
+                    if (p.x > w) p.x = 0;
+                    if (p.y < 0) p.y = h;
+                    if (p.y > h) p.y = 0;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(210, 210, 255, ${p.alpha})`;
+                    ctx.fill();
+                }
+
+                // garis antar bintang
+                for (let i = 0; i < particles.length; i++) {
+                    for (let j = i + 1; j < particles.length; j++) {
+                        const dx = particles[i].x - particles[j].x;
+                        const dy = particles[i].y - particles[j].y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 140) {
+                            ctx.beginPath();
+                            ctx.moveTo(particles[i].x, particles[i].y);
+                            ctx.lineTo(particles[j].x, particles[j].y);
+                            ctx.strokeStyle = `rgba(167, 139, 250, ${0.1 * (1 - dist / 140)})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.stroke();
+                        }
+                    }
+                }
+                requestAnimationFrame(draw);
+            }
+            draw();
+        })();
+    </script>
+</body>
+</html>
